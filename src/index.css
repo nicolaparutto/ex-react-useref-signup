@@ -1,5 +1,85 @@
+/* css reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* css default */
+body {
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+/* utility */
+.debug {
+  border: 1px dashed red;
+}
+
+.container {
+  margin: 50px auto;
+  max-width: 1000px;
+}
+
+/* form section style */
+.title {
+  text-align: center;
+}
+
+form {
+  border: 1px solid #000;
+  border-radius: 20px;
+  text-align: center;
+
+  button {
+    padding: 10px 25px;
+    background-color: #0786FF;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #045bab;
+    }
+  }
+}
+
+.subscription-form {
+  text-align: left;
+  padding: 20px;
+  display: flex;
+  justify-content: space-around;
+
+  label {
+    display: block;
+  }
+
+  .form-left {
+    input {
+      padding: 10px;
+      width: 300px;
+      margin-bottom: 15px;
+    }
+  }
+
+  .form-right {
+    select {
+      padding: 10px;
+      width: 200px;
+      margin-bottom: 15px;
+    }
+
+    input {
+      padding: 9px;
+      width: 100px;
+      margin-bottom: 15px;
+    }
+
+    textarea {
+      padding: 5px;
+      width: 400px;
+      height: 80px;
+    }
+  }
 }
