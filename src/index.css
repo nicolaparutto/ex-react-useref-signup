@@ -83,3 +83,10 @@ form {
     }
   }
 }
+
+.form-alert-message {
+  margin: 0 auto;
+  width: 600px;
+  color: red;
+  margin-bottom: 10px;
+}

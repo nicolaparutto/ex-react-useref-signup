@@ -32,7 +32,7 @@ function App() {
 
     if (!isAllFieldsFilled || formData.experience < 0 || !formData.specialization) {
       setAlertMessage(`
-        Attenzione! Controlla che tutti i campi del modulo siano comppilati, 
+        Attenzione! Controlla che tutti i campi del modulo siano compilati, 
         che gli anni di esperienza non siano indicati con un numero negativo
          e che la specializzazione sia selezionata.
         `)
@@ -79,7 +79,7 @@ function App() {
             </div>
           </div>
           {alertMessage && (
-            <div>
+            <div className="form-alert-message">
               <p>{alertMessage}</p>
             </div>
           )}
