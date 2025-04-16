@@ -27,6 +27,7 @@ body {
 /* form section style */
 .title {
   text-align: center;
+  margin-bottom: 20px;
 }
 
 form {
@@ -45,6 +46,16 @@ form {
 
     &:hover {
       background-color: #045bab;
+    }
+  }
+
+  .reset-btn {
+    padding: 10px 20px;
+    background: #5c5c5c;
+    margin-right: 20px;
+
+    &:hover {
+      background-color: #3c3c3c;
     }
   }
 }
@@ -89,6 +100,7 @@ form {
   margin: 0 auto;
   width: 600px;
   color: red;
+  font-size: 0.8rem;
   margin-bottom: 10px;
 }
 

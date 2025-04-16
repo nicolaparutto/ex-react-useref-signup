@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 
 const letters = "abcdefghijklmnopqrstuvwxyz";
 const numbers = "0123456789";
@@ -78,18 +78,27 @@ function App() {
     })
 
     // Alert message in caso di condizioni non rispettate
-    if (!isAllFieldsFilled || experience.current.value < 0 || specialization.current.value === "Seleziona un'opzione") {
-      setAlertMessage(`
-            Attenzione! Controlla che tutti i campi del modulo siano compilati, 
-            che gli anni di esperienza non siano indicati con un numero negativo
-             e che la specializzazione sia selezionata.
-            `)
+    if (!isAllFieldsFilled || experience.current.value < 0 || specialization.current.value === "Seleziona un'opzione" || !isUsernameValid || !isPasswordValid || !isDescriptionValid) {
+      setAlertMessage("Attenzione! Controlla che tutti i campi del modulo siano compilati correttamente")
       return;
     } else {
+      completeFormReset()
       setAlertMessage(null);
       console.log(completedFormData);
     }
   }
+
+  // Funzione globale per resettare tutti i campi del form
+  function completeFormReset() {
+    setFormData(defaultFormData)
+    name.current.value = "";
+    specialization.current.value = "Seleziona un'opzione";
+    experience.current.value = ""
+  }
+
+  useEffect(() => {
+    name.current.focus();
+  }, [])
 
   return (
     <>
@@ -134,7 +143,7 @@ function App() {
               <textarea name="description" value={formData.description} onChange={handleForm} ></textarea>
               {formData.description.trim() && (
                 !isDescriptionValid ?
-                  <p className="not-valid-field">Deve contenere tra 100 e 1000 caratteri (senza spazi iniziali e finali).</p> :
+                  <p className="not-valid-field">Deve contenere tra 100 e 1000 caratteri (senza spazi iniziali e finali). Attuali: {formData.description.trim().length}</p> :
                   <p className="valid-field">Descrizione valida</p>
               )}
             </div>
@@ -144,6 +153,7 @@ function App() {
               <p>{alertMessage}</p>
             </div>
           )}
+          <button className="reset-btn" type="button" onClick={completeFormReset}>Resetta tutti i campi</button>
           <button type="submit">Iscriviti</button>
         </form>
 
