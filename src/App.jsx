@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 
 const letters = "abcdefghijklmnopqrstuvwxyz";
 const numbers = "0123456789";
@@ -7,26 +7,27 @@ const symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
 function App() {
 
   const defaultFormData = {
-    name: "",
     username: "",
     password: "",
-    specialization: "",
-    experience: "",
     description: ""
   }
+  const name = useRef();
+  const specialization = useRef();
+  const experience = useRef();
 
   const [formData, setFormData] = useState(defaultFormData);
   const [alertMessage, setAlertMessage] = useState(null);
 
+  // Validazione username
   const isUsernameValid = useMemo(() => {
     const validCaracters = formData.username.split("").every((character) => {
       return letters.includes(character.toLowerCase()) || numbers.includes(character)
     })
     const validLength = formData.username.trim().length >= 6;
-
     return validLength && validCaracters;
   }, [formData.username]);
 
+  // Validazione password
   const isPasswordValid = useMemo(() => {
     const validLength = formData.password.trim().length >= 8;
     const validLetter = formData.password.split("").some((character) => {
@@ -38,42 +39,55 @@ function App() {
     const validNumber = formData.password.split("").some((character) => {
       return numbers.includes(character);
     })
-
     return validLength && validLetter && validSymbol && validNumber;
   }, [formData.password])
 
+  // Validazione Descrizione
   const isDescriptionValid = useMemo(() => {
     const validLength = formData.description.trim().length >= 100 && formData.description.trim().length <= 1000;
     return validLength;
   })
 
+  // Funzione al cambiamento dei campi con useState 
   function handleForm(e) {
     const value = e.target.value;
     const reference = e.target.name;
-
-    setFormData({
-      ...formData,
-      [reference]: value
+    setFormData(curr => {
+      return {
+        ...curr,
+        [reference]: value
+      }
     })
   }
 
+  // Funzione di gestione invio del form
   function handleSubmit(e) {
     e.preventDefault();
-    const formDataConverted = Object.values(formData);
+
+    const completedFormData = {
+      ...formData,
+      name: name.current.value,
+      specialization: specialization.current.value,
+      experience: experience.current.value
+    }
+
+    // Validazione tutti i campi compilati
+    const formDataConverted = Object.values(completedFormData);
     const isAllFieldsFilled = formDataConverted.every((field) => {
       return field.trim() !== "";
     })
 
-    if (!isAllFieldsFilled || formData.experience < 0 || !formData.specialization) {
+    // Alert message in caso di condizioni non rispettate
+    if (!isAllFieldsFilled || experience.current.value < 0 || specialization.current.value === "Seleziona un'opzione") {
       setAlertMessage(`
-        Attenzione! Controlla che tutti i campi del modulo siano compilati, 
-        che gli anni di esperienza non siano indicati con un numero negativo
-         e che la specializzazione sia selezionata.
-        `)
+            Attenzione! Controlla che tutti i campi del modulo siano compilati, 
+            che gli anni di esperienza non siano indicati con un numero negativo
+             e che la specializzazione sia selezionata.
+            `)
       return;
     } else {
       setAlertMessage(null);
-      console.log(formData);
+      console.log(completedFormData);
     }
   }
 
@@ -87,7 +101,7 @@ function App() {
             <div className="form-left">
 
               <label>Nome completo</label>
-              <input type="text" placeholder="Nome..." name="name" value={formData.name} onChange={handleForm} />
+              <input type="text" placeholder="Nome..." ref={name} />
 
               <label className="mt">Username</label>
               <input type="text" placeholder="Username..." name="username" value={formData.username} onChange={handleForm} />
@@ -106,14 +120,15 @@ function App() {
             </div>
             <div className="form-right">
               <label>Specializzazione</label>
-              <select name="specialization" value={formData.specialization} onChange={handleForm} >
+              <select name="specialization" ref={specialization}>
+                <option>Seleziona un'opzione</option>
                 <option>Full Stack</option>
                 <option>Frontend</option>
                 <option>Backend</option>
               </select>
 
               <label className="mt">Anni di esperienza</label>
-              <input type="number" name="experience" value={formData.experience} onChange={handleForm} />
+              <input type="number" name="experience" ref={experience} />
 
               <label className="mt">Breve descrizione personale</label>
               <textarea name="description" value={formData.description} onChange={handleForm} ></textarea>
